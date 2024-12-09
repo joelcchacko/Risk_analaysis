@@ -27,7 +27,7 @@ portfolio['ESG_Score'] = portfolio['Ticker'].map(esg_scores)
 portfolio['ESG_Score'].fillna(5, inplace=True)  # Default score for missing data
 
 # Fetch historical price data
-price_data = yf.download(tickers, start="2020-01-01", end="2023-12-31")['Adj Close']
+price_data = yf.download(tickers, start="2015-01-01", end="2023-12-31")['Adj Close']
 
 # Calculate daily returns
 returns = price_data.pct_change().dropna()
@@ -110,11 +110,15 @@ for ticker in portfolio['Ticker']:
 # Final Portfolio Metrics
 print("\n=== Portfolio Risk Analysis ===")
 print(f"Portfolio Annualized Return: {annualized_return:.2%}")
-print(f"Portfolio Annualized Volatility: {annualized_volatility:.2%}")
-print(f"Portfolio Sharpe Ratio: {sharpe_ratio:.2f}")
-print(f"Portfolio VaR (95% Confidence): {np.percentile(portfolio_returns, (1 - 0.95) * 100):.2%}")
-print(f"Average Portfolio ESG Score: {np.average(portfolio['ESG_Score'], weights=portfolio['Weight']):.2f}")
-
+print("This means the portfolio has grown by about {:.2f}% every year, on average.".format(annualized_return * 100))
+print(f"\nPortfolio Annualized Volatility: {annualized_volatility:.2%}")
+print("This indicates how much the portfolio's value goes up and down each year. A higher number means more risk, i.e., bigger fluctuations in value.")
+print(f"\nPortfolio Sharpe Ratio: {sharpe_ratio:.2f}")
+print("This number helps us understand how much return we get for each unit of risk. A higher number is better, showing we're getting more return for the risk we're taking.")
+print(f"P\nortfolio VaR (95% Confidence): {np.percentile(portfolio_returns, (1 - 0.95) * 100):.2%}")
+print("This is a way to measure potential losses in extreme situations. With 95% confidence, the portfolio could lose up to {:.2f}% of its value in a bad year.".format(np.percentile(portfolio_returns, (1 - 0.95) * 100) * 100))
+print(f"\nAverage Portfolio ESG Score: {np.average(portfolio['ESG_Score'], weights=portfolio['Weight']):.2f}")
+print("This score tells us how ethical and responsible the portfolio is, based on environmental, social, and governance factors. A higher number is better.")
 
 print("\n=== Portfolio Optimization Results ===")
 print(f"Optimal Portfolio Weights: {optimal_weighted_tickers}")
